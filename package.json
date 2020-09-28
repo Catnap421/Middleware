@@ -1,0 +1,22 @@
+{
+  "name": "middleware",
+  "version": "1.0.0",
+  "description": "This is middleware server between blockchain and web server.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byobl/Middleware.git"
+  },
+  "author": "catnap421",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/byobl/Middleware/issues"
+  },
+  "homepage": "https://github.com/byobl/Middleware#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
