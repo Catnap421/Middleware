@@ -1,30 +1,33 @@
-const express = require('express')
+const express = require("express");
+const app = express();
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const testRouter = require("./routes/test")
 
-const app = express()
+const port = process.env.PORT || 3000;
 
-app.set('port', process.env.PORT || 3000)
+// Extended: https://swagger.io/specification/#infoObject
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      version: "1.0.0",
+      title: "Customer API",
+      description: "Customer API Information",
+      contact: {
+        name: "Amazing Developer"
+      },
+      servers: ["http://localhost:3000"]
+    }
+  },
+  // ['.routes/*.js']
+  apis: ["./routes/*.js"]
+};
 
-app.get('/', (req, res) => {
-    res.type('text/plain')
-    res.send('Silok')
-})
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.use('/', testRouter );
 
-
-
-app.use((req, res) => {
-    res.type('text/plain')
-    res.status(404)
-    res.send('404 - Not Found')
-})
-
-app.use((err, req, res, next) => {
-    console.error(err.stack)
-    res.type('text/plain')
-    res.status(500)
-    res.send('500 - Server Error')
-})
-
-app.listen(app.get('port'), () => {
-    console.log('Express started on http://localhost' + app.get('port') + '; Press Ctrl-C to terminate.')
-})
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
