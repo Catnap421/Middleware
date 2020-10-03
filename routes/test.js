@@ -6,7 +6,7 @@ const hello = require("./lib/test")
 // Routes
 /**
  * @swagger
- * /customers:
+ * /test:
  *  get:
  *    description: Use to request all customers
  *    responses:
@@ -20,20 +20,20 @@ router.get("/test", (req, res) => {
   
   /**
    * @swagger
-   * /customers:
+   * /test:
    *    put:
    *      description: Use to return all customers
-   *    parameters:
-   *      - name: customer
-   *        in: query
-   *        description: Name of our customer
-   *        required: false
-   *        schema:
-   *          type: string
-   *          format: string
-   *    responses:
-   *      '201':
-   *        description: Successfully created user
+   *      parameters:
+   *        - name: customer
+   *          in: query
+   *          description: Name of our customer
+   *          required: false
+   *          schema:
+   *            type: string
+   *            format: string
+   *      responses:
+   *        '201':
+   *          description: Successfully created user
    */
   router.put("/test", (req, res) => {
     res.status(200).send("Successfully updated customer");

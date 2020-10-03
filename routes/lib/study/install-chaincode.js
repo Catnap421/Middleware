@@ -27,8 +27,8 @@ var path = require('path');
 var fs = require('fs');
 
 var Client = require('fabric-client');
-var Constants = require('./constants.js');
-var ClientUtils = require('./clientUtils.js');
+var Constants = require('./constants.js.js');
+var ClientUtils = require('./clientUtils.js.js');
 
 var ORGS, PEER_ORGS;
 

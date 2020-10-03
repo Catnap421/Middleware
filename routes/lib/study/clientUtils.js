@@ -24,7 +24,7 @@ var util = require('util');
 var Client = require('fabric-client');
 var copService = require('fabric-ca-client/lib/FabricCAClientImpl.js');
 var User = require('fabric-client/lib/User.js');
-var Constants = require('./constants.js');
+var Constants = require('./constants.js.js');
 
 // all temporary files and directories are created under here
 var tempdir = Constants.tempdir;

@@ -9,7 +9,7 @@ const path = require('path');
 
 const ccpPath = path.resolve(__dirname,  'connection-org1.json');
 
-async function query() {
+async function query(fcn) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -39,7 +39,12 @@ async function query() {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('queryAllCars');
+        let result;
+
+        if( fcn == "queryCar" )
+            result = await contract.evaluateTransaction('queryCar', 'CAR4');
+        else if( fcn == "queryAllCars" )
+            result = await contract.evaluateTransaction('queryAllCars');
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
     } catch (error) {

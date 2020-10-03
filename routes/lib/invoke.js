@@ -9,7 +9,7 @@ const path = require('path');
 
 const ccpPath = path.resolve(__dirname, 'connection-org1.json');
 
-async function invoke() {
+async function invoke(fcn, args) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -38,7 +38,10 @@ async function invoke() {
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
+        if( fcn == "createCar" )
+            await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
+        else if( fcn == "changeCarOwner" )
+            await contract.submitTransaction('changeCarOwner', 'CAR10', 'Dave')
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
