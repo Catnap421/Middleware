@@ -1,21 +1,44 @@
 const express = require("express");
 const router = express.Router();
-const hello = require("./lib/test")
-
+const network = require("fabric-network")
 
 // Routes
 /**
  * @swagger
- * /customers:
+ * /chaincode:
  *  get:
  *    description: Use to request all customers
  *    responses:
  *      '200':
  *        description: A successful response
  */
-router.get("/test", (req, res) => {
-    res.status(200).send("Customer results");
-    hello();
+
+
+
+router.get('/query', async function(req, res) {
+	// logger.debug('==================== QUERY BY CHAINCODE ==================');
+	// logger.debug('username :' + req.username);
+  // logger.debug('orgname:' + req.orgname);
+  const query = require("./lib/query");
+	query();
+});
+
+router.get('/invoke', async function(req, res) {
+  const invoke = require("./lib/invoke");
+  invoke();
+})
+
+  /**
+ * @swagger
+ * /chaincode:
+ *  get:
+ *    description: Use to request all customers
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+router.post("/chaincode", (req, res) => {
+    
   });
   
   /**
@@ -35,7 +58,7 @@ router.get("/test", (req, res) => {
    *      '201':
    *        description: Successfully created user
    */
-  router.put("/test", (req, res) => {
+  router.put("/chaincode", (req, res) => {
     res.status(200).send("Successfully updated customer");
   });
   

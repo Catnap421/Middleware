@@ -17,9 +17,13 @@
   },
   "homepage": "https://github.com/byobl/Middleware#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "fabric-ca-client": "^1.4.13",
+    "fabric-client": "^1.4.13",
+    "fabric-network": "^1.4.13"
   },
   "devDependencies": {
+    "nodemon": "^2.0.4",
     "swagger-jsdoc": "^4.2.0",
     "swagger-ui-express": "^4.1.4"
   }

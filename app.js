@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const chaincodeRouter = require("./routes/chaincode")
 const testRouter = require("./routes/test")
 
 const port = process.env.PORT || 3000;
@@ -26,7 +27,9 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use('/', testRouter );
+app.use('/chaincode', chaincodeRouter );
+
+app.use('/test', testRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
