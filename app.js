@@ -12,8 +12,8 @@ const swaggerOptions = {
   swaggerDefinition: {
     info: {
       version: "1.0.0",
-      title: "Customer API",
-      description: "Customer API Information",
+      title: "Middleware API",
+      description: "Middleware API Information",
       contact: {
         name: "Amazing Developer"
       },

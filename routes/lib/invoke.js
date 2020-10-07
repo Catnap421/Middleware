@@ -33,12 +33,14 @@ async function invoke(fcn, args) {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar');
+        const contract = network.getContract('byobl');
 
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        if( fcn == "createCar" )
+        if( fcn == "init" )
+            await contract.submitTransaction('initLedger', '');
+        else if( fcn == "createCar" )
             await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
         else if( fcn == "changeCarOwner" )
             await contract.submitTransaction('changeCarOwner', 'CAR10', 'Dave')

@@ -9,7 +9,7 @@ const path = require('path');
 
 const ccpPath = path.resolve(__dirname,  'connection-org1.json');
 
-async function query(fcn) {
+async function query(fcn, args) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -29,22 +29,23 @@ async function query(fcn) {
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
         await gateway.connect(ccpPath, { wallet, identity: 'user1', discovery: { enabled: true, asLocalhost: true } });
-
+        console.log("get gateway")
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
-
+        console.log("get network")
         // Get the contract from the network.
-        const contract = network.getContract('fabcar');
-
+        const contract = network.getContract('byobl');
+        console.log("get contract")
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         let result;
-
-        if( fcn == "queryCar" )
-            result = await contract.evaluateTransaction('queryCar', 'CAR4');
-        else if( fcn == "queryAllCars" )
+        if( fcn == "queryAllCars")
             result = await contract.evaluateTransaction('queryAllCars');
+        else if( fcn == "queryDDo" )
+            result = await contract.evaluateTransaction('queryDDo', args);
+        else if( fcn == "queryVC" )
+            result = await contract.evaluateTransaction('queryVC', args);
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
     } catch (error) {
@@ -52,5 +53,5 @@ async function query(fcn) {
         process.exit(1);
     }
 }
-
+// query("queryDDo", "sample")
 module.exports = query

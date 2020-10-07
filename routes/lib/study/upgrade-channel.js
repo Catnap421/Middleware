@@ -139,6 +139,7 @@ function upgradeChannel(channel_name, constants) {
 		config = fs.readFileSync('./tmp/exportingEntityOrg_update.pb');
 		console.log('Successfully created the config update');
 
+		// 이 부분에서 우리 서버의 admin에게만 허락을 받으면 되도록 변경하면 됨
 		var enrollmentAndSignPromises = [];
 		PEER_ORGS.forEach((org) => {
 			enrollmentAndSignPromises.push(enrollOrgAdminAndSignConfig);
