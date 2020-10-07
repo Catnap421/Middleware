@@ -13,7 +13,7 @@ async function invoke(fcn, args) {
     try {
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/routes/lib/wallet');
+        const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
@@ -38,8 +38,8 @@ async function invoke(fcn, args) {
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        if( fcn == "init" )
-            await contract.submitTransaction('initLedger', '');
+        if( fcn == "registerVC" )
+            await contract.submitTransaction('registerVC', 'sampleVC', "did:bob:controller", "UnivCert", "sssssssiiiiiiiiiiiggggggg", "", "2022-10-10T17:00:00Z");
         else if( fcn == "createCar" )
             await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
         else if( fcn == "changeCarOwner" )

@@ -13,7 +13,7 @@ async function query(fcn, args) {
     try {
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/routes/lib/wallet'); // routing 나중에 해주기
+        const walletPath = path.join(process.cwd(), 'wallet'); // routing 나중에 해주기
         console.log(walletPath);
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
@@ -29,13 +29,13 @@ async function query(fcn, args) {
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
         await gateway.connect(ccpPath, { wallet, identity: 'user1', discovery: { enabled: true, asLocalhost: true } });
-        console.log("get gateway")
+        
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
-        console.log("get network")
+        
         // Get the contract from the network.
         const contract = network.getContract('byobl');
-        console.log("get contract")
+        
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
