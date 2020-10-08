@@ -8,6 +8,58 @@ const network = require("fabric-network")
  * tags:
  *   name: Admin
  *   description: 관리자 관련 API
+ * definitions:
+ *   DDo:
+ *     type: object
+ *     required:
+ *       - key
+ *       - pubkey     
+ *     properties:
+ *       key:
+ *         type: string
+ *         description: Key for Identifier
+ *       pubkey:
+ *         type: string
+ *         description: 공개키
+ *       pubkeyType:
+ *         type: string
+ *         description: 공개키 타입
+ *       context:
+ *         type: string
+ *         description: Context Spec
+ *       sType:
+ *         type: string
+ *         description: Service Type for Issuer
+ *       sEndpoint:
+ *         type: string
+ *         description: Service Endpoint for Issuer
+ *   VC:
+ *     type: object
+ *     required:
+ *       - key
+ *       - conDID
+ *       - claimDef
+ *       - sig
+ *     properties:
+ *       key:
+ *         type: string
+ *         description: Key for stateDB
+ *       conDID:
+ *         type: string
+ *         description: Controller DID
+ *       claimDef:
+ *         type: string
+ *         description: Definition of Claim
+ *       sig:
+ *         type: string
+ *         description: Signature
+ *       sigType:
+ *         type: string
+ *         description: Signature Type(Default - byoblHashSig)
+ *       expired:
+ *         type: date
+ *         description: The date when is expired
+ *       
  */
 
 
@@ -70,8 +122,15 @@ router.post('/:user', async function(req, res) {
  *        description: Arguments of smart contract
  *        required: true
  *        schema:
- *          type: string
- *          format: string
+ *          $ref: '#/defintions/DDo'
+ *          example: {
+ *            key: "sample",
+ *            pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAikeNB9Q8cKN2fYFSn5Ty/GdpT6P4B5YP7E4uZybPojua3A7Vy24oeBXxRlAwU1b6hnsIvjC+JGuwsZqFActCNNaTt3T4SadOfcxZZSdlsqq+He/lOQK0qHxCL6A7MLT9/3nHCL6/LJ7RGQMGOEsaT8GHxWvvZfjlduyjTlli1u8ZXHu8RbcU7LnNNutbgqFfRpdyMJdbJwRL2sqSucj2M6ZOpvRH5Y5ISOa/+Is3wXIAkK9qFfdVvUU0n48KVGSNUcfT6nKgLfuMC7fyhH13iWqqYbL2loc+/Hmst1jlrryElTXwCBW7atMhirbgj4Q4PdZHUBrII9kHNilhYDIXNw== rsa-key-20201005",
+ *            pubkeyType: "",
+ *            context: "",
+ *            sType: "",
+ *            sEndpoint: ""
+ *          }
  *    responses:
  *      '200':
  *        description: A successful response
@@ -144,8 +203,15 @@ router.delete('/ddo', async function(req, res) {
  *        description: Arguments of smart contract
  *        required: true
  *        schema:
- *          type: string
- *          format: string
+ *          $ref : '#/definitions/VC'
+ *          example: {
+ *            key: "sampleVC",
+ *            conDID: "did:bob:controller",
+ *            claimDef: "UnivCert",
+ *            sig: "sssssssiiiiiiiiiiiggggggg",
+ *            sigType: "",
+ *            expired: "2022-10-10T17:00:00Z"
+ *          }        
  *    responses:
  *      '200':
  *        description: A successful response
