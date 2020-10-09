@@ -9,7 +9,7 @@ const path = require('path');
 
 const ccpPath = path.resolve(__dirname, 'connection-org1.json');
 
-async function main() {
+async function register() {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -53,4 +53,4 @@ async function main() {
     }
 }
 
-main();
+module.exports = register;

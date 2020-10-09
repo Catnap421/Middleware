@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const chaincodeRouter = require("./routes/chaincode")
-const testRouter = require("./routes/test")
+const chaincodeRouter = require("./routes/chaincode");
+const adminRouter = require("./routes/admin");
+const userRouter = require("./routes/user");
 
 const port = process.env.PORT || 3000;
 
@@ -12,11 +13,21 @@ const swaggerOptions = {
   swaggerDefinition: {
     info: {
       version: "1.0.0",
-      title: "Customer API",
-      description: "Customer API Information",
+      title: "Middleware API",
+      description: "Middleware API Information",
       contact: {
         name: "Amazing Developer"
       },
+      securitySchemes: {
+        apiKey: {
+          type: 'apiKey',
+          name: 'X-API-KEY',
+          in: 'header'
+        }
+      },
+      security : [
+        { apiKey: []}
+      ],
       servers: ["http://localhost:3000"]
     }
   },
@@ -28,8 +39,8 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use('/chaincode', chaincodeRouter );
-
-app.use('/test', testRouter);
+app.use('/admin', adminRouter);
+app.use('/user', userRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
