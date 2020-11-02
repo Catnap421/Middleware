@@ -89,16 +89,22 @@ router.post('/', async function(req, res) {
  *    description: Register Domain
  *    tags: [Admin]
  *    parameters:
- *      - name: domain
- *        in: body
- *        description: The domain(verifier) name
- *        required: true
+ *      - in: body
+ *        name: user
+ *        description: The user to create.
  *        schema:
- *          type: string
- *          format: string
+ *          type: object
+ *          required:
+ *            - domain
+ *            - user
+ *          properties:
+ *            domain:
+ *              type: string
+ *            user:
+ *              type: string
  *        example: {
- *          domain: "domain.com",
- *          user: "user"
+ *          domain: domain.com,
+ *          user: user
  *        }    
  *    security:
  *      - apiKey: []
@@ -110,7 +116,7 @@ router.post('/', async function(req, res) {
 
 router.post('/domain', async function(req, res) { 
   const register = require("./lib/registerDomainAndUser");
-  const uuidWithApiKey = register(req.body);
+  const uuidWithApiKey = await register(req.body);
   res.status(200).send(`Successfully Register Domain and User!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
 });
 

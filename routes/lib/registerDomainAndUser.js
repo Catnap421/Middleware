@@ -17,13 +17,13 @@ function registerApiKey(args){
     if(!jsonData[domain]) jsonData[domain] = {};
 
     jsonData[domain][args.user] = uuidWithApiKey.apiKey;
-    /*
+    
     try {
         fs.writeFileSync("./apikey.json", JSON.stringify(jsonData));
     } catch (error) {
         if(error) throw error;  
     }
-    */
+    
     console.log(`Register Complete!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
 
     return uuidWithApiKey

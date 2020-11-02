@@ -14,7 +14,6 @@ async function query(fcn, args) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet'); // routing 나중에 해주기
-        console.log(walletPath);
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 

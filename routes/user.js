@@ -62,5 +62,45 @@ router.get('/vc/:did', async function(req, res) {
   res.status(200).send("Successfully query transaction");
 });
 
+
+/**
+ * @swagger
+ * /user/apikey:
+ *  post:
+ *    description: Recover APIKey
+ *    tags: [User]
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        description: The user to recover apikey
+ *        schema:
+ *          type: object
+ *          required:
+ *            - domain
+ *            - user
+ *            - uuid
+ *          properties:
+ *            domain:
+ *              type: string
+ *            user:
+ *              type: string
+ *            uuid:
+ *              type: string
+ *        example: {
+ *          domain:"domain.com",
+ *          user: "user",
+ *          uuid: "3f4ed5d9-74f8-4555-a0d5-b16cdff9e8a3"
+ *        }    
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+
+router.post('/apikey', async function(req,res) {
+  const recoverApiKey = require("./lib/recoverApiKey");
+  const apiKey = await recoverApiKey(req.body);
+  res.status(200).send(`Successfully Recover APIKey.\nThe APIKey: ${apiKey}`);
+})
+
   
-  module.exports = router
+module.exports = router
