@@ -110,8 +110,8 @@ router.post('/', async function(req, res) {
 
 router.post('/domain', async function(req, res) { 
   const register = require("./lib/registerDomainAndUser");
-  register(req.body);
-  res.status(200).send("Successfully Register Domain and User");
+  const uuidWithApiKey = register(req.body);
+  res.status(200).send(`Successfully Register Domain and User!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
 });
 
 

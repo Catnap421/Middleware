@@ -17,14 +17,16 @@ function registerApiKey(args){
     if(!jsonData[domain]) jsonData[domain] = {};
 
     jsonData[domain][args.user] = uuidWithApiKey.apiKey;
-
+    /*
     try {
         fs.writeFileSync("./apikey.json", JSON.stringify(jsonData));
     } catch (error) {
         if(error) throw error;  
     }
-
+    */
     console.log(`Register Complete!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
+
+    return uuidWithApiKey
 }
 
 async function register(args) { // user에 맞춰서 접근제어 기능 추후 추가
@@ -70,15 +72,14 @@ async function register(args) { // user에 맞춰서 접근제어 기능 추후 
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes()); // user + "Org1" 추후 수정 필요
         await wallet.import(user, userIdentity);
         console.log('Successfully registered and enrolled admin user and imported it into the wallet');
-
+        
         // Register api-key for that user
-        registerApiKey(args);
-   
+        return registerApiKey(args);
 
     } catch (error) {
         console.error(`Failed to register user ${args.user}: ${error}`);
         process.exit(1);
-    }
+    }    
 }
 
 module.exports = register;
