@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const network = require("fabric-network")
 
+
+
 // Routes
 /**
  * @swagger
@@ -9,30 +11,6 @@ const network = require("fabric-network")
  *   name: Admin
  *   description: 관리자 관련 API
  * definitions:
- *   DDo:
- *     type: object
- *     required:
- *       - key
- *       - pubkey     
- *     properties:
- *       key:
- *         type: string
- *         description: Key for Identifier
- *       pubkey:
- *         type: string
- *         description: 공개키
- *       pubkeyType:
- *         type: string
- *         description: 공개키 타입
- *       context:
- *         type: string
- *         description: Context Spec
- *       sType:
- *         type: string
- *         description: Service Type for Issuer
- *       sEndpoint:
- *         type: string
- *         description: Service Endpoint for Issuer
  *   VC:
  *     type: object
  *     required:
@@ -59,6 +37,30 @@ const network = require("fabric-network")
  *       expired:
  *         type: date
  *         description: The date when is expired
+ *   DDo:
+ *     type: object
+ *     required:
+ *       - key
+ *       - pubkey     
+ *     properties:
+ *       key:
+ *         type: string
+ *         description: Key for Identifier
+ *       pubkey:
+ *         type: string
+ *         description: 공개키
+ *       pubkeyType:
+ *         type: string
+ *         description: 공개키 타입
+ *       context:
+ *         type: string
+ *         description: Context Spec
+ *       sType:
+ *         type: string
+ *         description: Service Type for Issuer
+ *       sEndpoint:
+ *         type: string
+ *         description: Service Endpoint for Issuer
  *       
  */
 
@@ -82,18 +84,22 @@ router.post('/', async function(req, res) {
 
 /**
  * @swagger
- * /admin/{user}:
+ * /admin/domain:
  *  post:
- *    description: Register User
+ *    description: Register Domain
  *    tags: [Admin]
  *    parameters:
- *      - name: user
+ *      - name: domain
  *        in: body
- *        description: The user(verifier) name
+ *        description: The domain(verifier) name
  *        required: true
  *        schema:
  *          type: string
  *          format: string
+ *        example: {
+ *          domain: "domain.com",
+ *          user: "user"
+ *        }    
  *    security:
  *      - apiKey: []
  *    responses:
@@ -102,11 +108,10 @@ router.post('/', async function(req, res) {
  */
  
 
-
-router.post('/:user', async function(req, res) { 
-  const register = require("./lib/registerUser");
-  register(req.body.user);
-  res.status(200).send("Successfully query transaction");
+router.post('/domain', async function(req, res) { 
+  const register = require("./lib/registerDomainAndUser");
+  register(req.body);
+  res.status(200).send("Successfully Register Domain and User");
 });
 
 
@@ -137,8 +142,8 @@ router.post('/:user', async function(req, res) {
  */
 router.post('/ddo', async function(req, res) {
   const invoke = require("./lib/invoke");
-  invoke(req.params.fcn, req.params.args);
-  res.status(200).send("Successfully invoke transaction");
+  invoke("registerDDo", req.body);
+  res.status(200).send("Successfully invoke registerDDo transaction");
 })
 
 
@@ -181,13 +186,14 @@ router.put('/ddo', async function(req, res) {
  *        schema:
  *          type: string
  *          format: string
+ *        example: "sample"
  *    responses:
  *      '200':
  *        description: A successful response
  */
 router.delete('/ddo', async function(req, res) {
   const invoke = require("./lib/invoke");
-  invoke(req.params.fcn, req.params.args);
+  invoke("removeDDo", req.query.args);
   res.status(200).send("Successfully invoke transaction");
 })
 
@@ -203,7 +209,7 @@ router.delete('/ddo', async function(req, res) {
  *        description: Arguments of smart contract
  *        required: true
  *        schema:
- *          $ref : '#/definitions/VC'
+ *          $ref: '#/defintions/VC'
  *          example: {
  *            key: "sampleVC",
  *            conDID: "did:bob:controller",
@@ -211,15 +217,15 @@ router.delete('/ddo', async function(req, res) {
  *            sig: "sssssssiiiiiiiiiiiggggggg",
  *            sigType: "",
  *            expired: "2022-10-10T17:00:00Z"
- *          }        
+ *          }      
  *    responses:
  *      '200':
  *        description: A successful response
  */
 router.post('/vc', async function(req, res) {
   const invoke = require("./lib/invoke");
-  invoke(req.params.fcn, req.params.args);
-  res.status(200).send("Successfully invoke transaction");
+  invoke("registerVC", req.body);
+  res.status(200).send("Successfully invoke registerVC transaction");
 })
   
 module.exports = router

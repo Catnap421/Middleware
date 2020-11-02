@@ -20,7 +20,8 @@
     "express": "^4.17.1",
     "fabric-ca-client": "^1.4.13",
     "fabric-client": "^1.4.13",
-    "fabric-network": "^1.4.13"
+    "fabric-network": "^1.4.13",
+    "uuid-apikey": "^1.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",

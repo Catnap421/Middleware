@@ -8,6 +8,7 @@ const userRouter = require("./routes/user");
 
 const port = process.env.PORT || 3000;
 
+
 // Extended: https://swagger.io/specification/#infoObject
 const swaggerOptions = {
   swaggerDefinition: {
@@ -35,8 +36,11 @@ const swaggerOptions = {
   apis: ["./routes/*.js"]
 };
 
+
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.use(express.json())
 
 app.use('/chaincode', chaincodeRouter );
 app.use('/admin', adminRouter);

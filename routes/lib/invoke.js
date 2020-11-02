@@ -34,16 +34,20 @@ async function invoke(fcn, args) {
 
         // Get the contract from the network.
         const contract = network.getContract('byobl');
+        console.log(args);
 
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
         if( fcn == "registerVC" )
-            await contract.submitTransaction('registerVC', 'sampleVC', "did:bob:controller", "UnivCert", "sssssssiiiiiiiiiiiggggggg", "", "2022-10-10T17:00:00Z");
-        else if( fcn == "createCar" )
-            await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
-        else if( fcn == "changeCarOwner" )
-            await contract.submitTransaction('changeCarOwner', 'CAR10', 'Dave')
+            await contract.submitTransaction('registerVC', args.key, args.conDID, args.claimDef, args.sig, args.sigType, args.expired);
+        else if( fcn == "registerDDo" )
+            await contract.submitTransaction('registerDID', args.key, args.pubkey, args.pubkeyType, args.context, args.sType, args.sEndpoint); // Transaction name should be updated!
+        else if (fcn == "removeDDo") {
+            await contract.submitTransaction('removeDDo', args);
+            console.log("Delete Success.");
+        }
+         
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
