@@ -16,7 +16,7 @@ function registerApiKey(args){
 
     if(!jsonData[domain]) jsonData[domain] = {};
 
-    jsonData[domain][args.user] = {"uuid": uuidWithApiKey.apiKey, "count": 0};
+    jsonData[domain][args.user] = {"apikey": uuidWithApiKey.apiKey, "count": 0};
     
     try {
         fs.writeFileSync("./apikey.json", JSON.stringify(jsonData));

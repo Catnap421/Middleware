@@ -1,4 +1,4 @@
-const FileSystemWallet = require('fabric-network');
+const { FileSystemWallet } = require('fabric-network');
 const uuidAPIKey = require("uuid-apikey");
 const path = require('path');
 
