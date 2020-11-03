@@ -6,6 +6,8 @@ const chaincodeRouter = require("./routes/chaincode");
 const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
 
+const indexRouter = require("./routes/index")
+
 const port = process.env.PORT || 3000;
 
 
@@ -13,7 +15,7 @@ const port = process.env.PORT || 3000;
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      version: "1.0.0",
+      version: "1.1.0",
       title: "Middleware API",
       description: "Middleware API Information",
       contact: {
@@ -45,6 +47,7 @@ app.use(express.json())
 app.use('/chaincode', chaincodeRouter );
 app.use('/admin', adminRouter);
 app.use('/user', userRouter);
+app.use('/', indexRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
