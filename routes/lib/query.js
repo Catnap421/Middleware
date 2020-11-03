@@ -6,28 +6,46 @@
 
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
+const fs = require('fs');
 
 const ccpPath = path.resolve(__dirname,  'connection-org1.json');
 
-async function query(fcn, args) {
+async function query(fcn, user, domain, args, apikey) {
     try {
+        const jsonFile = fs.readFileSync('./apikey.json', 'utf8');
+        const jsonData = JSON.parse(jsonFile);
 
+        if(jsonData[domain][user].apikey == apikey) {
+            jsonData[domain][user].count++;
+            try {
+                fs.writeFileSync("./apikey.json", JSON.stringify(jsonData));
+            } catch (error) {
+                if(error) throw error;  
+            }
+        }
+        else {
+            console.log(jsonData[domain][user].apikey);
+            console.log(apikey);
+            console.log('Invalid User!!')
+            return;
+        }
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet'); // routing 나중에 해주기
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('user1');
+        const userWithDomain = `${user}.${domain}`;
+        const userExists = await wallet.exists(userWithDomain);
         if (!userExists) {
-            console.log('An identity for the user "user1" does not exist in the wallet');
+            console.log(`An identity for the user ${userWithDomain} does not exist in the wallet`);
             console.log('Run the registerUser.js application before retrying');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'user1', discovery: { enabled: true, asLocalhost: true } });
+        await gateway.connect(ccpPath, { wallet, identity: userWithDomain, discovery: { enabled: true, asLocalhost: true } });
         
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');

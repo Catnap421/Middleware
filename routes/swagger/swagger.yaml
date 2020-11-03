@@ -40,7 +40,7 @@ paths:
             domain: domain.com,
             user: user   
       security:
-        - apiKey: []
+        - APIKeyHeader: []
       responses:
         '200':
           description: A successful response
@@ -106,15 +106,29 @@ paths:
       description: Query registered DDo
       tags: [User]
       parameters:
-        - name: did
+        - name: user
           in: query
+          description: user
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: domain
+          in: query
+          description: domain
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: did
+          in: path
           description: The Document of DID
           required: true
           schema:
             type: string
             format: string
       security:
-        - apiKey:[]
+        - APIKeyHeader: []
       responses:
         '200':
           description: A successful response
@@ -123,15 +137,29 @@ paths:
       description: Query registered VC
       tags: [User]
       parameters:
-        - name: did
+        - name: user
           in: query
-          description: The Document of VC
+          description: user
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: domain
+          in: query
+          description: domain
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: did
+          in: path
+          description: The Document of DID
           required: true
           schema:
             type: string
             format: string
       security:
-        - apiKey:[]
+        - APIKeyHeader: []
       responses:
         '200':
           description: A successful response
@@ -272,7 +300,7 @@ securityDefinitions:
   APIKeyHeader:
     type: apiKey
     in: header
-    name: X-API-Key
+    name: apiKey
       
 definitions:
   Contact:

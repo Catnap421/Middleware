@@ -4,13 +4,15 @@ const network = require("fabric-network")
 
 router.get('/ddo/:did', async function(req, res) { 
   const query = require("./lib/query");
-  query("queryDDo", req.query.did);
+  const path = req.path.split('/')[2];
+  query("queryDDo", req.query.user, req.query.domain, path, req.headers.apikey);
   res.status(200).send("Successfully query transaction");
 });
 
 router.get('/vc/:did', async function(req, res) { 
   const query = require("./lib/query");
-  query("queryVC", req.query.did);
+  const path = req.path.split('/')[2];
+  query("queryVC", req.query.user, req.query.domain, path, req.headers.apikey);
   res.status(200).send("Successfully query transaction");
 });
 
