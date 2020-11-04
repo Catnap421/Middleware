@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 const network = require("fabric-network")
 
-router.get('/ddo/:did', async function(req, res) { 
+const { apiLimiter, deprecated} = require('./rateLimit');
+
+router.get('/ddo/:did', apiLimiter, async function(req, res) { 
   const query = require("./lib/query");
   const path = req.path.split('/')[2];
   query("queryDDo", req.query.user, req.query.domain, path, req.headers.apikey);
   res.status(200).send("Successfully query transaction");
 });
 
-router.get('/vc/:did', async function(req, res) { 
+router.get('/vc/:did', deprecated, async function(req, res) { 
   const query = require("./lib/query");
   const path = req.path.split('/')[2];
   query("queryVC", req.query.user, req.query.domain, path, req.headers.apikey);
