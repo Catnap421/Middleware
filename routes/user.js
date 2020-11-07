@@ -4,11 +4,16 @@ const network = require("fabric-network")
 
 const { apiLimiter, deprecated} = require('./rateLimit');
 
+router.get('/test', function(req, res){
+  console.log("testing success!!");
+  res.status(200).send("testing success!!");
+})
+
 router.get('/ddo/:did', apiLimiter, async function(req, res) { 
   const query = require("./lib/query");
   const path = req.path.split('/')[2];
   query("queryDDo", req.query.user, req.query.domain, path, req.headers.apikey);
-  res.status(200).send("Successfully query transaction");
+  res.status(200).json({"name": "catnap"});
 });
 
 router.get('/vc/:did', deprecated, async function(req, res) { 

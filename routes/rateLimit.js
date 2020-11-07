@@ -2,7 +2,7 @@ const RateLimit = require('express-rate-limit');
 
 exports.apiLimiter = new RateLimit({
     windowMs: 10 * 60 * 1000,
-    max: 1,
+    max: 100,
     handler(req, res){
         res.status(this.statusCode).json({
             code: this.statusCode,

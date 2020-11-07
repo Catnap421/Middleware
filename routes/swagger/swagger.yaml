@@ -7,7 +7,7 @@ info:
     name: "JoHyunWoo"
     email: "wlq7410@naver.com"
 
-basePath: ""
+basePath: "/"
 paths:
   /admin:
     post:
@@ -15,7 +15,7 @@ paths:
       tags: [Admin]
       produces:
         - "application/json"
-      resopnses:
+      responses:
         200:
           description: A successful response
   /admin/domain:
@@ -36,9 +36,6 @@ paths:
                 type: string
               user:
                 type: string
-          example: 
-            domain: domain.com,
-            user: user   
       security:
         - APIKeyHeader: []
       responses:
@@ -80,10 +77,7 @@ paths:
           in: query
           description: Arguments of smart contract
           required: true
-          schema:
-            type: string
-            format: string
-          example: "sample"
+          type: string
       responses:
         '200':
           description: A successful response
@@ -101,6 +95,20 @@ paths:
       responses:
         '200':
           description: A successful response
+
+  /user/test:
+    get:
+      description: testing
+      tags: [User]
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+
+      responses:
+        '200':
+          description: Testing Success
+          
   /user/ddo/{did}:
     get:
       description: Query registered DDo
@@ -110,23 +118,22 @@ paths:
           in: query
           description: user
           required: true
-          schema:
-            type: string
-            format: string
+          type: string
         - name: domain
           in: query
           description: domain
           required: true
-          schema:
-            type: string
-            format: string
+          type: string
         - name: did
           in: path
           description: The Document of DID
           required: true
-          schema:
-            type: string
-            format: string
+          type: string
+        - name: api_key
+          in: query
+          description: api key for api-umbrella
+          required: true
+          type: string
       security:
         - APIKeyHeader: []
       responses:
@@ -141,23 +148,17 @@ paths:
           in: query
           description: user
           required: true
-          schema:
-            type: string
-            format: string
+          type: string
         - name: domain
           in: query
           description: domain
           required: true
-          schema:
-            type: string
-            format: string
+          type: string
         - name: did
           in: path
           description: The Document of DID
           required: true
-          schema:
-            type: string
-            format: string
+          type: string
       security:
         - APIKeyHeader: []
       responses:
@@ -184,10 +185,6 @@ paths:
                 type: string
               uuid:
                 type: string
-          example: 
-            domain: "domain.com"
-            user: "user"
-            uuid: "3f4ed5d9-74f8-4555-a0d5-b16cdff9e8a3"   
       responses:
         '200':
           description: A successful response
@@ -291,10 +288,10 @@ paths:
           description: "Contact not found"
 
 tags:
-  name: Admin
-  description: 관리자 관련 API
-  name: User
-  description: 사용자 관련 API
+  - name: Admin
+    description: 관리자 관련 API
+  - name: User
+    description: 사용자 관련 API
     
 securityDefinitions:
   APIKeyHeader:
@@ -354,7 +351,7 @@ definitions:
         description: "Signature Type(Default - byoblHashSig)"
         example: ""
       expired:
-        type: "date"
+        type: "string"
         description: "The date when is expired"
         example: "2022-10-10T17:00:00Z"
 
