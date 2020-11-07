@@ -17,11 +17,11 @@ paths:
         - "application/json"
       responses:
         201:
-          description: Created. A successful response.
+          description: Created. A successful response
         400:
-          description: Bad Request. The admin is already enrolled.
+          description: Bad Request. The admin is already enrolled
         401:
-          description: Unauthorized. The api-key is needed.
+          description: Unauthorized. The api-key is needed
   /admin/domain:
     post:
       description: Register Domain
@@ -44,11 +44,11 @@ paths:
         - APIKeyHeader: []
       responses:
         201:
-          description: Created. A successful response.
+          description: Created. A successful response
         400:
-          description: Bad Request. The user is already registerd.
+          description: Bad Request. The user is already registerd
         401:
-          description: Unauthorized.
+          description: Unauthorized. Register admin first
   /admin/ddo:
     post:
       description: Use to invoke function
@@ -61,8 +61,10 @@ paths:
           schema:
             $ref: '#/definitions/DDo'
       responses:
-        '200':
-          description: A successful response
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized. Register admin first
     put:
       description: Use to invoke function
       tags: [Admin]
@@ -87,8 +89,10 @@ paths:
           required: true
           type: string
       responses:
-        '200':
-          description: A successful response
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized. Register admin first
   /admin/vc:
     post:
       description: Use to invoke function
@@ -101,8 +105,10 @@ paths:
           schema:
             $ref: '#/definitions/VC'    
       responses:
-        '200':
-          description: A successful response
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized. Register admin first
 
   /user/test:
     get:
@@ -137,16 +143,15 @@ paths:
           description: The Document of DID
           required: true
           type: string
-        - name: api_key
-          in: query
-          description: api key for api-umbrella
-          required: true
-          type: string
       security:
         - APIKeyHeader: []
       responses:
-        '200':
-          description: A successful response
+        200:
+          description: OK. A successful response 
+        401:
+          description: Unauthorized
+        404:
+          description: Not Found
   /user/vc/{did}:
     get:
       description: Query registered VC
@@ -170,8 +175,12 @@ paths:
       security:
         - APIKeyHeader: []
       responses:
-        '200':
-          description: A successful response
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized
+        404:
+          description: Not Found
   /user/apikey:
     post:
       description: Recover APIKey
@@ -194,8 +203,12 @@ paths:
               uuid:
                 type: string
       responses:
-        '200':
-          description: A successful response
+        200:
+          description: OK. A successful response
+        400:
+          description: Bad Requests. Invalid UUID
+        401:
+          description: Unauthorized. Register admin first
   /contacts:
     get:
       summary: list contacts

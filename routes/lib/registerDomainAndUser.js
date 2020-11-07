@@ -24,10 +24,10 @@ function registerApiKey(args){
     } catch (error) {
         if(error) throw error;  
     }
-    
-    console.log(`Register Complete!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
 
-    return uuidWithApiKey
+    logger.info(`Register Complete!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
+
+    return uuidWithApiKey;
 }
 
 async function register(args) { // user에 맞춰서 접근제어 기능 추후 추가
@@ -42,21 +42,20 @@ async function register(args) { // user에 맞춰서 접근제어 기능 추후 
         if(!fs.existsSync(walletPath)) fs.mkdirSync(walletPath);
 
         let wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
+        logger.info(`Wallet path: ${walletPath}`);
     
         // Check to see if we've already enrolled the user.
         const userExists = await wallet.exists(user);
         if (userExists) {
-            console.log(`An identity for the user ${user} already exists in the wallet`);
-            return;
+            logger.warn(`An identity for the user ${user} already exists in the wallet`);
+            return {status: 400};
         }
 
         // Check to see if we've already enrolled the admin user.
         const adminExists = await wallet.exists('admin');
         if (!adminExists) {
-            console.log('An identity for the admin user "admin" does not exist in the wallet');
-            console.log('Run the enrollAdmin.js application before retrying');
-            return;
+            logger.warn('An identity for the admin user "admin" does not exist in the wallet\nRun the enrollAdmin.js application before retrying')
+            return {status: 401};
         }
 
         // Create a new gateway for connecting to our peer node.
@@ -72,13 +71,13 @@ async function register(args) { // user에 맞춰서 접근제어 기능 추후 
         const enrollment = await ca.enroll({ enrollmentID: user, enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes()); // user + "Org1" 추후 수정 필요
         await wallet.import(user, userIdentity);
-        console.log('Successfully registered and enrolled admin user and imported it into the wallet');
+        logger.info('Successfully registered and enrolled domain user and imported it into the wallet')
         
         // Register api-key for that user
         return registerApiKey(args);
 
     } catch (error) {
-        console.error(`Failed to register user ${args.user}: ${error}`);
+        logger.error(`Failed to register user ${args.user}: ${error}`);
         process.exit(1);
     }    
 }

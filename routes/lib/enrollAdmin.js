@@ -1,7 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- */
-
 'use strict';
 
 const FabricCAServices = require('fabric-ca-client');
@@ -25,25 +21,25 @@ async function enroll() {
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
-
+        logger.info(`Wallet path: ${walletPath}`);
+        
         // Check to see if we've already enrolled the admin user.
         const adminExists = await wallet.exists('admin');
         if (adminExists) {
-            console.log('An identity for the admin user "admin" already exists in the wallet');
-            return;
+            logger.warn('An identity for the admin user "admin" already exists in the wallet');
+            return {status: 400};
         }
 
         // Enroll the admin user, and import the new identity into the wallet.
         const enrollment = await ca.enroll({ enrollmentID: 'admin', enrollmentSecret: 'adminpw' });
         const identity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
         await wallet.import('admin', identity);
-        console.log('Successfully enrolled admin user "admin" and imported it into the wallet');
+        logger.info('Successfully enrolled admin user "admin" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to enroll admin user "admin": ${error}`);
-        process.exit(1);
+        logger.error(`Failed to enroll admin user "admin": ${error}`)
+        process.exit(1); // 나중에 바꿀 것
     }
 }
 
-module.exports = enroll
+module.exports = enroll;

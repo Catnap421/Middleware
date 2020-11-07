@@ -1,7 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- */
-
 'use strict';
 
 const { FileSystemWallet, Gateway } = require('fabric-network');
@@ -11,6 +7,7 @@ const logger = require(process.cwd()+'/config/winston');
 const ccpPath = path.resolve('./config',  'connection-org1.json');
 
 async function query(fcn, user, domain, args, apikey) {
+    // API 사용량 측정
     try {
         const jsonFile = fs.readFileSync('./apikey.json', 'utf8');
         const jsonData = JSON.parse(jsonFile);
@@ -24,23 +21,19 @@ async function query(fcn, user, domain, args, apikey) {
             }
         }
         else {
-            console.log(jsonData[domain][user].apikey);
-            console.log(apikey);
-            console.log('Invalid User!!')
-            return;
+            logger.warn('Invalid User. The api-key is invalid');
+            return {status:401};
         }
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet'); // routing 나중에 해주기
         const wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
         const userWithDomain = `${user}.${domain}`;
         const userExists = await wallet.exists(userWithDomain);
         if (!userExists) {
-            console.log(`An identity for the user ${userWithDomain} does not exist in the wallet`);
-            console.log('Run the registerUser.js application before retrying');
-            return;
+            logger.warn(`An identity for the user ${userWithDomain} does not exist in the wallet\nRun the registerUser.js application before retrying`)
+            return {status: 401};
         }
 
         // Create a new gateway for connecting to our peer node.
@@ -54,21 +47,19 @@ async function query(fcn, user, domain, args, apikey) {
         const contract = network.getContract('byobl');
         
         // Evaluate the specified transaction.
-        // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
-        // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         let result;
-        if( fcn == "queryAllCars")
-            result = await contract.evaluateTransaction('queryAllCars');
-        else if( fcn == "queryDDo" )
+        if( fcn == "queryDDo" )
             result = await contract.evaluateTransaction('queryDDo', args);
         else if( fcn == "queryVC" )
             result = await contract.evaluateTransaction('queryVC', args);
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
+        logger.info(`Transaction has been evaluated, result is: ${result.toString()}`);
+
+        return result;
     } catch (error) {
-        console.error(`Failed to evaluate transaction: ${error}`);
-        process.exit(1);
+        logger.error(`Failed to evaluate transaction: ${error}`);
+        return {status: 404};
     }
 }
-// query("queryDDo", "sample")
+
 module.exports = query

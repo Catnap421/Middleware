@@ -10,21 +10,18 @@ async function recoverApiKey(args){
 
     const walletPath = path.join(process.cwd(), 'wallet');
     const wallet = new FileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
 
     const userExists = await wallet.exists(user);
     if(!userExists) {
-        console.log(`An identity for the user ${user} does not exist in the wallet`);
-        console.log('Run the registerUser.js application before retrying');
-        return;
+        logger.warn(`An identity for the user ${user} does not exist in the wallet\nRun the registerUser.js application before retrying`)
+        return {status: 401};
     }
 
     if(!uuidAPIKey.isUUID(uuid)){ 
-        console.log(`The UUID(${uuid}) is invalid. Please UUID check again.`)
-        return;
+        logger.warn('The UUID(${uuid}) is invalid. Please UUID check again.');
+        return {status: 400};
     }
-
-    console.log('Successfully Recover APIKey')
+    logger.info('Successfully Recover APIKey');
 
     return uuidAPIKey.toAPIKey(uuid);
 }
