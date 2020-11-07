@@ -63,6 +63,8 @@ paths:
       responses:
         200:
           description: OK. A successful response
+        400:
+          description: Bad Request
         401:
           description: Unauthorized. Register admin first
     put:

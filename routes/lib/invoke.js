@@ -46,7 +46,7 @@ async function invoke(fcn, args) {
 
     } catch (error) {
         logger.error(`Failed to submit transaction: ${error}`);
-        process.exit(1);
+        return {status: 400}
     }
 }
 

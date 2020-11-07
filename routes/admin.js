@@ -7,7 +7,7 @@ router.post('/', async function(req, res) {
   const enroll = require("./lib/enrollAdmin");
   logger.info('POST /admin');
   const ret = await enroll();
-  if(ret.status === 400) res.status(400).send("Admin is already enrolled!");
+  if(ret !== undefined) res.status(400).send("Admin is already enrolled!");
   else res.status(201).send("Successfully Register Admin!");
 });
 
@@ -25,8 +25,9 @@ router.post('/ddo', async function(req, res) {
   const invoke = require("./lib/invoke");
   logger.info('POST /admin/ddo');
   const ret = await invoke("registerDDo", req.body);
-  if(ret.status === 401) res.status(401).send('Register admin first');
-  else res.status(201).send("Successfully invoke registerDDo transaction");
+  if(ret === undefined) res.status(201).send("Successfully invoke registerDDo transaction");
+  else if(ret.status === 400) res.status(400).send("Bad Request");
+  else res.status(401).send('Register admin first');
 })
 
 router.put('/ddo', async function(req, res) {
@@ -44,7 +45,7 @@ router.delete('/ddo', async function(req, res) {
   const invoke = require("./lib/invoke");
   logger.info('DELETE /admin/ddo');
   const ret = await invoke("removeDDo", req.query.args);
-  if(ret.status === 401) res.status(401).send('Register admin first');
+  if(ret !== undefined) res.status(401).send('Register admin first');
   else res.status(204).send("Successfully invoke removeDDo transaction");
 })
 
@@ -52,8 +53,9 @@ router.post('/vc', async function(req, res) {
   const invoke = require("./lib/invoke");
   logger.info('POST /admin/vc');
   const ret = await invoke("registerVC", req.body);
-  if(ret.status === 401) res.status(401).send('Register admin first');
-  else res.status(201).send("Successfully invoke registerVC transaction");
+  if(ret === undefined) res.status(201).send("Successfully invoke registerVC transaction");
+  else if(ret.status === 400) res.status(400).send("Bad Request");
+  else res.status(401).send('Register admin first');
 })
   
 module.exports = router
