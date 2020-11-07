@@ -1,13 +1,13 @@
+process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+if(process.env.NODE_ENV == 'development') console.log('The DEV_ENV is development');
 const express = require("express");
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./routes/swagger/swagger.yaml');
 
-const chaincodeRouter = require("./routes/chaincode");
 const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
-
 const RateLimit = require('express-rate-limit');
 
 const port = process.env.PORT || 3000;
@@ -31,7 +31,6 @@ const limiter = RateLimit({
 app.use('/user', limiter);
 app.use(express.json())
 
-app.use('/chaincode', chaincodeRouter );
 app.use('/admin', adminRouter);
 app.use('/user', userRouter);
 

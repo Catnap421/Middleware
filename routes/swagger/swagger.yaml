@@ -16,8 +16,12 @@ paths:
       produces:
         - "application/json"
       responses:
-        200:
-          description: A successful response
+        201:
+          description: Created. A successful response.
+        400:
+          description: Bad Request. The admin is already enrolled.
+        401:
+          description: Unauthorized. The api-key is needed.
   /admin/domain:
     post:
       description: Register Domain
@@ -39,8 +43,12 @@ paths:
       security:
         - APIKeyHeader: []
       responses:
-        '200':
-          description: A successful response
+        201:
+          description: Created. A successful response.
+        400:
+          description: Bad Request. The user is already registerd.
+        401:
+          description: Unauthorized.
   /admin/ddo:
     post:
       description: Use to invoke function

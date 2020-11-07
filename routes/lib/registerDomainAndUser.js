@@ -3,9 +3,10 @@
 const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
+const logger = require(process.cwd()+'/config/winston');
 const uuidAPIKey = require('uuid-apikey');
 
-const ccpPath = path.resolve(__dirname, 'connection-org1.json');
+const ccpPath = path.resolve('./config', 'connection-org1.json');
 
 function registerApiKey(args){
     const domain = args.domain;

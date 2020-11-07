@@ -24,6 +24,8 @@
     "fabric-client": "^1.4.13",
     "fabric-network": "^1.4.13",
     "uuid-apikey": "^1.5.1",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

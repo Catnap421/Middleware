@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const network = require("fabric-network")
+const logger = require(process.cwd()+'/config/winston');
 
 const { apiLimiter, deprecated} = require('./rateLimit');
 
 router.get('/test', function(req, res){
-  console.log("testing success!!");
+  logger.info('testing success');
   res.status(200).send("testing success!!");
 })
 

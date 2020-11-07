@@ -7,8 +7,8 @@
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
-
-const ccpPath = path.resolve(__dirname,  'connection-org1.json');
+const logger = require(process.cwd()+'/config/winston');
+const ccpPath = path.resolve('./config',  'connection-org1.json');
 
 async function query(fcn, user, domain, args, apikey) {
     try {

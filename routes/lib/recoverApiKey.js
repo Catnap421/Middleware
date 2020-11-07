@@ -1,6 +1,7 @@
 const { FileSystemWallet } = require('fabric-network');
 const uuidAPIKey = require("uuid-apikey");
 const path = require('path');
+const logger = require(process.cwd()+'/config/winston');
 
 async function recoverApiKey(args){
     const domain = args.domain;
