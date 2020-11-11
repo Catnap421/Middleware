@@ -10,7 +10,7 @@ const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
 const RateLimit = require('express-rate-limit');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
