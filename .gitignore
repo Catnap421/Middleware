@@ -1,4 +1,4 @@
-node_modules
-logs
-wallet
-uploads
+node_modules/
+logs/
+wallet/
+uploads/
