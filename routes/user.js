@@ -19,7 +19,7 @@ router.get('/ddo/:did', apiLimiter, async function(req, res) {
   else res.status(404).send('Error');
 });
 
-router.get('/vc/:did', deprecated, async function(req, res) { 
+router.get('/vc/:did', apiLimiter, async function(req, res) { 
   const query = require("./lib/query");
   logger.info('GET /user/vc/:did');
   const path = req.path.split('/')[2];
