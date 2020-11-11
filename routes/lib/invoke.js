@@ -26,7 +26,7 @@ async function invoke(fcn, args) {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('byobl');
+        const contract = network.getContract('sillock');
         logger.info(`invoke - ${args}`);
 
         // Submit the specified transaction.

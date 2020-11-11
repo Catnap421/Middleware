@@ -44,7 +44,7 @@ async function query(fcn, user, domain, args, apikey) {
         const network = await gateway.getNetwork('mychannel');
         
         // Get the contract from the network.
-        const contract = network.getContract('byobl');
+        const contract = network.getContract('sillock');
         
         // Evaluate the specified transaction.
         let result;

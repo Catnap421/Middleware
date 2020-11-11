@@ -15,7 +15,8 @@ router.post('/domain', async function(req, res) {
   const register = require("./lib/registerDomainAndUser");
   logger.info('POST /admin/domain');
   const ret = await register(req.body);
-  if(!ret.hasOwnProperty('status'))  res.status(201).send(`Successfully Register Domain and User!\nUUID: ${uuidWithApiKey.uuid}, APIKey: ${uuidWithApiKey.apiKey}`);
+
+  if(!ret.hasOwnProperty('status'))  res.status(201).send(`Successfully Register Domain and User!\nUUID: ${ret.uuid}, APIKey: ${ret.apiKey}`);
   else if(ret.status === 400) res.status(400).send('The user is already registered');
   else res.status(401).send('Register admin first');
  
