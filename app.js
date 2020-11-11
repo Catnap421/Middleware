@@ -17,7 +17,12 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.set('views', __dirname +'/views');
 
 app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
+app.use(express.static(__dirname + '/views'));
+//app.engine('html', require('ejs').renderFile);
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 const index = require('./routes/index');
 app.use('/',index);

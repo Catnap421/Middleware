@@ -78,7 +78,7 @@ async function register(args) { // user에 맞춰서 접근제어 기능 추후 
 
     } catch (error) {
         logger.error(`Failed to register user ${args.user}: ${error}`);
-        process.exit(1);
+        return {status:400}
     }    
 }
 
