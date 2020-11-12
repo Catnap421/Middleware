@@ -279,7 +279,8 @@ definitions:
     type: "object"
     required:
     - "key"
-    - "pubkey"     
+    - "pubkey"  
+    - "sID"   
     properties:
       key:
         type: "string"
@@ -297,6 +298,10 @@ definitions:
         type: "string"
         description: "Context Spec"
         example: ""
+      sID:
+        type: "string"
+        description: ""
+        example: "did:bob:issuerDID"
       sType:
         type: "string"
         description: "Service Type for Issuer"
