@@ -5,6 +5,7 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./routes/swagger/swagger.yaml');
+const cors = require('cors');
 
 const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/user");
@@ -23,6 +24,8 @@ app.use(express.static(__dirname + '/views'));
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+
+app.use(cors());
 
 const index = require('./routes/index');
 app.use('/',index);
