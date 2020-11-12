@@ -35,7 +35,7 @@ async function invoke(fcn, args) {
         if( fcn == "registerVC" )
             await contract.submitTransaction('registerDDo', args.key, args.conDID, args.claimDef, args.sig, args.sigType, args.expired);
         else if( fcn == "registerDDo" )
-            await contract.submitTransaction('registerDDO', args.key, args.pubkey, args.pubkeyType, args.context, args.sType, args.sEndpoint); // Transaction name should be updated!
+            await contract.submitTransaction('registerVC', args.key, args.pubkey, args.pubkeyType, args.context, args.sType, args.sEndpoint); // Transaction name should be updated!
         else if (fcn == "removeDDo") {
             await contract.submitTransaction('removeDDo', args);
             logger.info("Delete Success.");

@@ -51,7 +51,7 @@ async function query(fcn, user, domain, args, apikey) {
         if( fcn == "queryDDo" )
             result = await contract.evaluateTransaction('queryDDo', args);
         else if( fcn == "queryVC" )
-            result = await contract.evaluateTransaction('queryVC', args);
+            result = await contract.evaluateTransaction('queryDDo', args);
 
         logger.info(`Transaction has been evaluated, result is: ${result.toString()}`);
 
