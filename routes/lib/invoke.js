@@ -33,9 +33,9 @@ async function invoke(fcn, args) {
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
         if( fcn == "registerVC" )
-            await contract.submitTransaction('registerVC', args.key, args.conDID, args.claimDef, args.sig, args.sigType, args.expired);
+            await contract.submitTransaction('registerDDo', args.key, args.conDID, args.claimDef, args.sig, args.sigType, args.expired);
         else if( fcn == "registerDDo" )
-            await contract.submitTransaction('registerDID', args.key, args.pubkey, args.pubkeyType, args.context, args.sType, args.sEndpoint); // Transaction name should be updated!
+            await contract.submitTransaction('registerDDO', args.key, args.pubkey, args.pubkeyType, args.context, args.sType, args.sEndpoint); // Transaction name should be updated!
         else if (fcn == "removeDDo") {
             await contract.submitTransaction('removeDDo', args);
             logger.info("Delete Success.");
