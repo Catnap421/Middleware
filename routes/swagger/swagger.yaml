@@ -229,34 +229,51 @@ definitions:
     type: "object"
     required:
     - "key"
-    - "conDID"
-    - "claimDef"
+    - "issuerDID"
+    - "controller"
+    - "issuanceDate"
+    - "expirationDate"
     - "sig"
+    - "sigType"
+    - "hashType"
+    - "claim"
     properties:
       key:
         type: "string"
-        description: "Key for stateDB"
-        example: "sampleVC"
-      conDID:
+        description: "Key - DID of Document"
+        example: "did:bob:exampleCert"
+      issuerDID:
         type: "string"
-        description: "Controller DID"
+        description: "DID of Issuer"
+        example: "did:bob:kitri"
+      controller:
+        type: "string"
+        description: "DID of Controller"
         example: "did:bob:controller"
-      claimDef:
+      issuanceDate:
         type: "string"
-        description: "Definition of Claim"
-        example: "UnivCert"
+        description: "Issuance Date"
+        example: "2020-10-10T17:00:00Z"
+      expirationDate:
+        type: "string"
+        description: "Expiration Date"
+        example: "2022-10-10T17:00:00Z"
       sig:
         type: "string"
         description: "Signature"
-        example: "sssssssiiiiiiiiiiiggggggg"
+        example: "exampleSignature"
       sigType:
         type: "string"
-        description: "Signature Type(Default - byoblHashSig)"
-        example: ""
-      expired:
+        description: "The type of Signature"
+        example: "secp256k1"
+      hashType:
         type: "string"
-        description: "The date when is expired"
-        example: "2022-10-10T17:00:00Z"
+        description: "The type of Hash"
+        example: "SHA-256"
+      claim:
+        type: "string"
+        description: "The hash of Claims"
+        example: "hash---claim==="
 
   DDo:
     type: "object"
