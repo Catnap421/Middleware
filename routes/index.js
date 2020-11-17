@@ -16,20 +16,56 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), function(req,
   logger.info(`req.file is ${req.file}`);
   const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
 
+  const hash = '';
+  const did, controllerDID, signature;
+
   pdf(dataBuffer).then(function(data) {
-    console.log('data.text:');
-    var arr = data.text.split('\n');
-    var i = 0;
-    arr.forEach(el => console.log(`${++i}: ${el}`));
+    const lines = [7, 8, 10, 12, 13, 14, 16, 18, 19, 21, 23];
+    const pdfLines = data.text.split('\n');
+
+    pdfLines.map((el, idx) => console.log(`${idx}:${el}`))
+
+    did = pdfLines[3];
+    controllerDID = pdfLines[4];
+
+    for(var line of lines) {
+      console.log(pdfLines[line]);
+      let data = pdfLines[line];
+      data = data.split(':');
+      // trim을 통해 공백 제거해줘야 함
+      if(data[1].startsWith('#')) hash += data[1].trim().slice(1);
+      else hash += crypto.createHash('sha256').update(data[1].trim()).digest('hex'); 
+    }
+
+    hash = crypto.createHash('sha256').update(hash).digest('hex');
+    console.log('hash:', hash)
+    signature = pdfLines[pdfLines.length - 1];
   });
-  // 여기에서 did를 뽑아내야 함
-  let did = 'exampleCert57228'
+  /*
+    var hash = '';
+    for(var [key, value] of Object.entries(data.Claim))
+        hash += crypto.createHash('sha256').update(value).digest('hex');
+    
+    hash = crypto.createHash('sha256').update(hash).digest('hex');
+  */ 
+
   // 파일 읽기 -> 분해해서 질의
   const query = require("./lib/query");
+  const ddo = query("queryDDo", req.body.user, req.body.domain, controllerDID, req.body.apikey);
+  // const publicKey = ddo.proof.public
 
+  const vc = query("queryVC", req.body.user, req.body.domain, did, req.body.apikey); // await가 안 먹히는 이유가 뭐지?
 
-  const ret = query("queryVC", req.body.user, req.body.domain, did, req.body.apikey); // await가 안 먹히는 이유가 뭐지?
-  console.log(ret)
+    /*
+   const verifier = crypto.createVerify('RSA-SHA256')
+
+    verifier.update(hash, 'ascii')
+
+    const publicKeyBuf = Buffer.from(publicKey, 'ascii')
+    const signatureBuf = Buffer.from(vc.signature, 'base64')
+    const result = verifier.verify(publicKeyBuf, signatureBuf)
+  */
+
   res.status(204).send();
 })
 
