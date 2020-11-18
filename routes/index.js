@@ -13,7 +13,7 @@ router.get('/', function(req, res){
 
 router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async function(req, res){
   logger.info(`req.body is ${req.body.user}, ${req.body.domain}, ${req.body.apikey}`);
-  logger.info(`req.file is ${req.file}`);
+  logger.info(`req.file is ${req.file.originalname}`);
   const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
 
   let hash = '';
@@ -27,7 +27,6 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async functio
     issuerDID = pdfLines[5].split(':')[2].trim();
 
     for(var line of lines) {
-      console.log(pdfLines[line]);
       let data = pdfLines[line];
       data = data.split(':');
      
@@ -36,7 +35,7 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async functio
     }
 
     hash = crypto.createHash('sha256').update(hash).digest('hex');
-    console.log('hash:', hash)
+    logger.info('hash:',hash);
     signature = pdfLines[pdfLines.length - 1];
   });
 
@@ -48,27 +47,21 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async functio
   const vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); // await가 안 먹히는 이유가 뭐지?
   const vc_signature = vc.proof.signature;
  
+  // signature check
   if(signature !== vc_signature)
-    logger.error('pdf signature and vc signature are not equal')
-    
+    logger.error('pdf signature and vc signature are not equal');
   
-  const verifier = crypto.createVerify('RSA-SHA256')
+  const verifier = crypto.createVerify('RSA-SHA256');
+  verifier.update(hash, 'ascii');
 
-  verifier.update(hash, 'ascii')
+  const publicKeyBuf = Buffer.from(publicKey, 'ascii');
+  const signatureBuf = Buffer.from(signature, 'base64');
+  const result = verifier.verify(publicKeyBuf, signatureBuf);
 
-  const publicKeyBuf = Buffer.from(publicKey, 'ascii')
-  const signatureBuf = Buffer.from(signature, 'base64')
-  const result = verifier.verify(publicKeyBuf, signatureBuf)
+  logger.info('result:', result);
 
-  console.log('result:', result);
-
-  res.status(204).send();
+  res.render('result', {filename: req.file.originalname, result: result});
 })
-
-router.get('/result', function(req, res){
-  res.render('result');
-})
-
 
 
 module.exports = router;
