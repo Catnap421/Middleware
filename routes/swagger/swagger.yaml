@@ -1,0 +1,313 @@
+swagger: "2.0"
+info:
+  description: "Middleware API Information"
+  version: "1.1.0"
+  title: "Middleware API"
+  contact:
+    name: "JoHyunWoo"
+    email: "wlq7410@naver.com"
+
+basePath: "/"
+paths:
+  /admin:
+    post:
+      description: Register Admin
+      tags: [Admin]
+      produces:
+        - "application/json"
+      responses:
+        201:
+          description: Created. A successful response
+        400:
+          description: Bad Request. The admin is already enrolled
+        401:
+          description: Unauthorized. The api-key is needed
+  /admin/domain:
+    post:
+      description: Register Domain
+      tags: [Admin]
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            required:
+              - domain
+              - user
+            properties:
+              domain:
+                type: string
+              user:
+                type: string
+      security:
+        - APIKeyHeader: []
+      responses:
+        201:
+          description: Created. A successful response
+        400:
+          description: Bad Request. The user is already registerd
+        401:
+          description: Unauthorized. Register admin first
+  /admin/ddo:
+    post:
+      description: Use to invoke function
+      tags: [Admin]
+      parameters:
+        - name: args
+          in: body
+          description: Arguments of smart contract
+          required: true
+          schema:
+            $ref: '#/definitions/DDo'
+      responses:
+        200:
+          description: OK. A successful response
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized. Register admin first
+    put:
+      description: Use to invoke function
+      tags: [Admin]
+      parameters:
+        - name: args
+          in: body
+          description: Arguments of smart contract
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: A successful response
+    delete:
+      description: Use to invoke function
+      tags: [Admin]
+      parameters:
+        - name: args
+          in: query
+          description: Arguments of smart contract
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized. Register admin first
+  /admin/vc:
+    post:
+      description: Use to invoke function
+      tags: [Admin]
+      parameters:
+        - name: args
+          in: body
+          description: Arguments of smart contract
+          required: true
+          schema:
+            $ref: '#/definitions/VC'    
+      responses:
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized. Register admin first
+
+  /user/test:
+    get:
+      description: testing
+      tags: [User]
+      parameters:
+        - name: api_key
+          in: query
+          type: string
+
+      responses:
+        '200':
+          description: Testing Success
+          
+  /user/ddo/{did}:
+    get:
+      description: Query registered DDo
+      tags: [User]
+      parameters:
+        - name: user
+          in: query
+          description: user
+          required: true
+          type: string
+        - name: domain
+          in: query
+          description: domain
+          required: true
+          type: string
+        - name: did
+          in: path
+          description: The Document of DID
+          required: true
+          type: string
+      security:
+        - APIKeyHeader: []
+      responses:
+        200:
+          description: OK. A successful response 
+        401:
+          description: Unauthorized
+        404:
+          description: Not Found
+  /user/vc/{did}:
+    get:
+      description: Query registered VC
+      tags: [User]
+      parameters:
+        - name: user
+          in: query
+          description: user
+          required: true
+          type: string
+        - name: domain
+          in: query
+          description: domain
+          required: true
+          type: string
+        - name: did
+          in: path
+          description: The Document of DID
+          required: true
+          type: string
+      security:
+        - APIKeyHeader: []
+      responses:
+        200:
+          description: OK. A successful response
+        401:
+          description: Unauthorized
+        404:
+          description: Not Found
+  /user/apikey:
+    post:
+      description: Recover APIKey
+      tags: [User]
+      parameters:
+        - in: body
+          name: user
+          description: The user to recover apikey
+          schema:
+            type: object
+            required:
+              - domain
+              - user
+              - uuid
+            properties:
+              domain:
+                type: string
+              user:
+                type: string
+              uuid:
+                type: string
+      responses:
+        200:
+          description: OK. A successful response
+        400:
+          description: Bad Requests. Invalid UUID
+        401:
+          description: Unauthorized. Register admin first
+  
+tags:
+  - name: Admin
+    description: 관리자 관련 API
+  - name: User
+    description: 사용자 관련 API
+    
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: apiKey
+      
+definitions:
+  VC:
+    type: "object"
+    required:
+    - "key"
+    - "issuerDID"
+    - "controller"
+    - "issuanceDate"
+    - "expirationDate"
+    - "sig"
+    - "sigType"
+    - "hashType"
+    - "claim"
+    properties:
+      key:
+        type: "string"
+        description: "Key - DID of Document"
+        example: "did:bob:exampleCert"
+      issuerDID:
+        type: "string"
+        description: "DID of Issuer"
+        example: "did:bob:kitri"
+      controller:
+        type: "string"
+        description: "DID of Controller"
+        example: "did:bob:controller"
+      issuanceDate:
+        type: "string"
+        description: "Issuance Date"
+        example: "2020-10-10T17:00:00Z"
+      expirationDate:
+        type: "string"
+        description: "Expiration Date"
+        example: "2022-10-10T17:00:00Z"
+      sig:
+        type: "string"
+        description: "Signature"
+        example: "exampleSignature"
+      sigType:
+        type: "string"
+        description: "The type of Signature"
+        example: "secp256k1"
+      hashType:
+        type: "string"
+        description: "The type of Hash"
+        example: "SHA-256"
+      claim:
+        type: "string"
+        description: "The hash of Claims"
+        example: "hash---claim==="
+
+  DDo:
+    type: "object"
+    required:
+    - "key"
+    - "pubkey"  
+    - "sID"   
+    properties:
+      key:
+        type: "string"
+        description: "Key for Identifier"
+        example: "sample"
+      pubkey:
+        type: "string"
+        description: "공개키"
+        example: "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAikeNB9Q8cKN2fYFSn5Ty/GdpT6P4B5YP7E4uZybPojua3A7Vy24oeBXxRlAwU1b6hnsIvjC+JGuwsZqFActCNNaTt3T4SadOfcxZZSdlsqq+He/lOQK0qHxCL6A7MLT9/3nHCL6/LJ7RGQMGOEsaT8GHxWvvZfjlduyjTlli1u8ZXHu8RbcU7LnNNutbgqFfRpdyMJdbJwRL2sqSucj2M6ZOpvRH5Y5ISOa/+Is3wXIAkK9qFfdVvUU0n48KVGSNUcfT6nKgLfuMC7fyhH13iWqqYbL2loc+/Hmst1jlrryElTXwCBW7atMhirbgj4Q4PdZHUBrII9kHNilhYDIXNw== rsa-key-20201005"
+      pubkeyType:
+        type: "string"
+        description: "공개키 타입"
+        example: ""
+      context:
+        type: "string"
+        description: "Context Spec"
+        example: ""
+      sID:
+        type: "string"
+        description: ""
+        example: "did:bob:issuerDID"
+      sType:
+        type: "string"
+        description: "Service Type for Issuer"
+        example: ""
+      sEndpoint:
+        type: "string"
+        description: "Service Endpoint for Issuer"
+        example: ""
+       

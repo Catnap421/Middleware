@@ -1,0 +1,7 @@
+node_modules
+logs
+wallet
+uploads
+
+config/connection-org1.json
+apikey.json
