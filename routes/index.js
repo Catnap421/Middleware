@@ -11,62 +11,62 @@ router.get('/', function(req, res){
   res.render('index');
 })
 
-router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async function(req, res){
-  logger.info(`req.body is ${req.body.user}, ${req.body.domain}, ${req.body.apikey}`);
-  logger.info(`req.file is ${req.file.originalname}`);
+router.post('/upload', multer({ dest: 'uploads/'}).array('pdf', 10), async function(req, res){
+  logger.info('POST /upload');
+  let result = [];
+  let filename = [];
 
-  const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
-  fs.unlinkSync(`./uploads/${req.file.filename}`);
+  for (let file of req.files) {
+    const dataBuffer = fs.readFileSync(`./uploads/${file.filename}`)
 
-  let hash = '';
-  var did = '', issuerDID = '', signature = '';
+    fs.unlinkSync(`./uploads/${file.filename}`);
 
-  await pdf(dataBuffer).then(function(data) {
-    const lines = [7, 8, 10, 12, 13, 14, 16, 18, 19, 21, 23];
-    const pdfLines = data.text.split('\n');
+    let hash = '';
+    var did = '', issuerDID = '', signature = '';
 
-    did = pdfLines[4].split(':')[2].trim();
-    issuerDID = pdfLines[5].split(':')[2].trim();
+    await pdf(dataBuffer).then(function(data) {
+      const lines = [7, 8, 10, 12, 13, 14, 16, 18, 19, 21, 23];
+      const pdfLines = data.text.split('\n');
 
-    for(var line of lines) {
-      let data = pdfLines[line];
-      data = data.split(':');
-     
-      if(data[1].startsWith('#')) hash += data[1].trim().slice(1);
-      else hash += crypto.createHash('sha256').update(data[1].trim()).digest('hex'); 
-    }
+      did = pdfLines[4].split(':')[2].trim();
+      issuerDID = pdfLines[5].split(':')[2].trim();
 
-    hash = crypto.createHash('sha256').update(hash).digest('hex');
-    logger.info('hash:',hash);
-    signature = pdfLines[pdfLines.length - 1];
-  });
+      for(var line of lines) {
+        let data = pdfLines[line];
+        data = data.split(':');
+      
+        if(data[1].startsWith('#')) hash += data[1].trim().slice(1);
+        else hash += crypto.createHash('sha256').update(data[1].trim()).digest('hex'); 
+      }
+
+      hash = crypto.createHash('sha256').update(hash).digest('hex');
+      console.log('hash:',hash);
+      signature = pdfLines[pdfLines.length - 1];
+    });
+    
+    const query = require("./lib/query");
+
+    const ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
+    const publicKey = ddo.publicKey[0]['publickeyPem'];
+
+    const vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); 
+    const vc_signature = vc.proof.signature;
   
-  const query = require("./lib/query");
+    // signature check
+    if(signature !== vc_signature)
+      logger.error('pdf signature and vc signature are not equal');
+    
+    const verifier = crypto.createVerify('RSA-SHA256');
+    verifier.update(hash, 'ascii');
 
-  const ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
-  const publicKey = ddo.publicKey[0]['publickeyPem'];
+    const publicKeyBuf = Buffer.from(publicKey, 'ascii');
+    const signatureBuf = Buffer.from(signature, 'base64');
+    result.push(verifier.verify(publicKeyBuf, signatureBuf));
+    filename.push(file.originalname);
+    logger.debug(`filename: ${filename}, result: ${result}`);
+  }
 
-  await setTimeout(function() {
-    console.log('Works!');
-  }, 1500);
-
-  const vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); // await가 안 먹히는 이유가 뭐지?
-  const vc_signature = vc.proof.signature;
- 
-  // signature check
-  if(signature !== vc_signature)
-    logger.error('pdf signature and vc signature are not equal');
-  
-  const verifier = crypto.createVerify('RSA-SHA256');
-  verifier.update(hash, 'ascii');
-
-  const publicKeyBuf = Buffer.from(publicKey, 'ascii');
-  const signatureBuf = Buffer.from(signature, 'base64');
-  const result = verifier.verify(publicKeyBuf, signatureBuf);
-
-  logger.info('result:', result);
-
-  res.render('result', {filename: req.file.originalname, result: result});
+  res.render('result', {filename:filename, result:result});
 })
 
 

@@ -10,11 +10,12 @@
      <table border="1">
         <th width="500">파일 이름</th>
         <th>검증 결과</th>
-        <tr align="center">
-            <td><%= filename %></td>
-            <td><%= result %></td>
-        </tr>
-        
+        <% for (var i = 0;i < result.length;i++){ %>
+            <tr align="center">
+                <td><%= filename[i] %></td>
+                <td><%= result[i] %></td>
+            </tr>
+        <% } %>       
      </table>
 </fieldset>
 
