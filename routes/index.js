@@ -11,30 +11,26 @@ router.get('/', function(req, res){
   res.render('index');
 })
 
-router.post('/upload', multer({ dest: 'uploads/'}).single('file'), function(req, res){
+router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async function(req, res){
   logger.info(`req.body is ${req.body.user}, ${req.body.domain}, ${req.body.apikey}`);
   logger.info(`req.file is ${req.file}`);
   const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
 
-  const hash = '';
-  const did = '';
-  const controllerDID = '';
-  const signature = '';
+  let hash = '';
+  var did = '', issuerDID = '', signature = '';
 
-  pdf(dataBuffer).then(function(data) {
+  await pdf(dataBuffer).then(function(data) {
     const lines = [7, 8, 10, 12, 13, 14, 16, 18, 19, 21, 23];
     const pdfLines = data.text.split('\n');
 
-    pdfLines.map((el, idx) => console.log(`${idx}:${el}`))
-
-    did = pdfLines[3];
-    controllerDID = pdfLines[4];
+    did = pdfLines[4].split(':')[2].trim();
+    issuerDID = pdfLines[5].split(':')[2].trim();
 
     for(var line of lines) {
       console.log(pdfLines[line]);
       let data = pdfLines[line];
       data = data.split(':');
-      // trim을 통해 공백 제거해줘야 함
+     
       if(data[1].startsWith('#')) hash += data[1].trim().slice(1);
       else hash += crypto.createHash('sha256').update(data[1].trim()).digest('hex'); 
     }
@@ -43,30 +39,28 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), function(req,
     console.log('hash:', hash)
     signature = pdfLines[pdfLines.length - 1];
   });
-  /*
-    var hash = '';
-    for(var [key, value] of Object.entries(data.Claim))
-        hash += crypto.createHash('sha256').update(value).digest('hex');
-    
-    hash = crypto.createHash('sha256').update(hash).digest('hex');
-  */ 
 
-  // 파일 읽기 -> 분해해서 질의
   const query = require("./lib/query");
-  const ddo = query("queryDDo", req.body.user, req.body.domain, controllerDID, req.body.apikey);
-  // const publicKey = ddo.proof.public
 
-  const vc = query("queryVC", req.body.user, req.body.domain, did, req.body.apikey); // await가 안 먹히는 이유가 뭐지?
+  const ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
+  const publicKey = ddo.publicKey[0]['publickeyPem'];
 
-    /*
-   const verifier = crypto.createVerify('RSA-SHA256')
+  const vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); // await가 안 먹히는 이유가 뭐지?
+  const vc_signature = vc.proof.signature;
+ 
+  if(signature !== vc_signature)
+    logger.error('pdf signature and vc signature are not equal')
+    
+  
+  const verifier = crypto.createVerify('RSA-SHA256')
 
-    verifier.update(hash, 'ascii')
+  verifier.update(hash, 'ascii')
 
-    const publicKeyBuf = Buffer.from(publicKey, 'ascii')
-    const signatureBuf = Buffer.from(vc.signature, 'base64')
-    const result = verifier.verify(publicKeyBuf, signatureBuf)
-  */
+  const publicKeyBuf = Buffer.from(publicKey, 'ascii')
+  const signatureBuf = Buffer.from(signature, 'base64')
+  const result = verifier.verify(publicKeyBuf, signatureBuf)
+
+  console.log('result:', result);
 
   res.status(204).send();
 })
