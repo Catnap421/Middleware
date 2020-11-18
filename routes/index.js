@@ -14,7 +14,7 @@ router.get('/', function(req, res){
 router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async function(req, res){
   logger.info(`req.body is ${req.body.user}, ${req.body.domain}, ${req.body.apikey}`);
   logger.info(`req.file is ${req.file.originalname}`);
-  
+
   const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
   fs.unlinkSync(`./uploads/${req.file.filename}`);
 
@@ -45,6 +45,10 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async functio
 
   const ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
   const publicKey = ddo.publicKey[0]['publickeyPem'];
+
+  await setTimeout(function() {
+    console.log('Works!');
+  }, 1500);
 
   const vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); // await가 안 먹히는 이유가 뭐지?
   const vc_signature = vc.proof.signature;
