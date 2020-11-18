@@ -14,7 +14,9 @@ router.get('/', function(req, res){
 router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async function(req, res){
   logger.info(`req.body is ${req.body.user}, ${req.body.domain}, ${req.body.apikey}`);
   logger.info(`req.file is ${req.file.originalname}`);
+  
   const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
+  fs.unlinkSync(`./uploads/${req.file.filename}`);
 
   let hash = '';
   var did = '', issuerDID = '', signature = '';
@@ -38,7 +40,7 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), async functio
     logger.info('hash:',hash);
     signature = pdfLines[pdfLines.length - 1];
   });
-
+  
   const query = require("./lib/query");
 
   const ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
