@@ -17,7 +17,9 @@ router.post('/upload', multer({ dest: 'uploads/'}).single('file'), function(req,
   const dataBuffer = fs.readFileSync(`./uploads/${req.file.filename}`);
 
   const hash = '';
-  const did, controllerDID, signature;
+  const did = '';
+  const controllerDID = '';
+  const signature = '';
 
   pdf(dataBuffer).then(function(data) {
     const lines = [7, 8, 10, 12, 13, 14, 16, 18, 19, 21, 23];
