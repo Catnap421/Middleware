@@ -45,16 +45,26 @@ router.post('/upload', multer({ dest: 'uploads/'}).array('pdf', 10), async funct
     });
     
     const query = require("./lib/query");
+    let ddo, publicKey, vc, vc_signature;
+    try{
+      ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
+      publicKey = ddo.publicKey[0]['publickeyPem'];
 
-    const ddo = JSON.parse(await query("queryDDo", req.body.user, req.body.domain, issuerDID, req.body.apikey));
-    const publicKey = ddo.publicKey[0]['publickeyPem'];
-
-    const vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); 
-    const vc_signature = vc.proof.signature;
-  
+      vc = JSON.parse(await query("queryVC", req.body.user, req.body.domain, did, req.body.apikey)); 
+      vc_signature = vc.proof.signature;
+    } catch(error) {
+      logger.error('Verification Error!');
+      result.push('Not Enrolled');
+      filename.push(file.originalname);
+      continue;
+    }
     // signature check
-    if(signature !== vc_signature)
+    if(signature !== vc_signature) {
       logger.error('pdf signature and vc signature are not equal');
+      result.push('pdf signature and vc signature are not equal');
+      filename.push(file.originalname);
+      continue;
+    }
     
     const verifier = crypto.createVerify('RSA-SHA256');
     verifier.update(hash, 'ascii');

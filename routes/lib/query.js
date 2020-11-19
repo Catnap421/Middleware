@@ -58,7 +58,7 @@ async function query(fcn, user, domain, args, apikey) {
         return result;
     } catch (error) {
         logger.error(`Failed to evaluate transaction: ${error}`);
-        return {status: 404};
+        return {status: 404, error};
     }
 }
 
