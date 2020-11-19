@@ -54,7 +54,7 @@ router.post('/upload', multer({ dest: 'uploads/'}).array('pdf', 10), async funct
       vc_signature = vc.proof.signature;
     } catch(error) {
       logger.error('Verification Error!');
-      result.push('Not Enrolled');
+      result.push('미등록');
       filename.push(file.originalname);
       continue;
     }
@@ -71,7 +71,7 @@ router.post('/upload', multer({ dest: 'uploads/'}).array('pdf', 10), async funct
 
     const publicKeyBuf = Buffer.from(publicKey, 'ascii');
     const signatureBuf = Buffer.from(signature, 'base64');
-    result.push(verifier.verify(publicKeyBuf, signatureBuf));
+    result.push(verifier.verify(publicKeyBuf, signatureBuf) ? "성공" : "@실패@");
     filename.push(file.originalname);
     logger.debug(`filename: ${filename}, result: ${result}`);
   }
