@@ -12,7 +12,8 @@ router.get('/test', function(req, res){
 router.get('/ddo/:did', apiLimiter, async function(req, res) { 
   const query = require("./lib/query");
   logger.info('GET /user/ddo/:did');
-  const path = req.path.split('/')[2];
+  const path = req.path.split('/')[2].split('%2C');
+  console.log(path)
   const ret = await query("queryDDo", req.query.user, req.query.domain, path, req.headers.apikey);
   if(!ret.hasOwnProperty('status')) res.status(200).json(ret.toString());
   else if(ret.status === 401) res.status(401).send('Unauthorized');
@@ -22,7 +23,8 @@ router.get('/ddo/:did', apiLimiter, async function(req, res) {
 router.get('/vc/:did', apiLimiter, async function(req, res) { 
   const query = require("./lib/query");
   logger.info('GET /user/vc/:did');
-  const path = req.path.split('/')[2];
+  const path = req.path.split('/')[2].split('%2C');
+  console.log(path)
   const ret = await query("queryVC", req.query.user, req.query.domain, path, req.headers.apikey);
   if(!ret.hasOwnProperty('status')) res.status(200).json(ret.toString());
   else if(ret.status === 401) res.status(401).send('Unauthorized');
