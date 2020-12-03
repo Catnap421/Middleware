@@ -49,13 +49,13 @@ async function query(fcn, user, domain, args, apikey) {
         // Evaluate the specified transaction.
         let result;
         if( fcn == "queryDDo" )
-            result = await contract.evaluateTransaction('queryDDo', args);
+            result = await contract.evaluateTransaction('queryDDo', ...args);
         else if( fcn == "queryVC" )
-            result = await contract.evaluateTransaction('queryDDo', args);
+            result = await contract.evaluateTransaction('queryDDo', ...args);
 
         logger.info(`Transaction has been evaluated, result is: ${result.toString()}`);
 
-        return result;
+        return result.toString();
     } catch (error) {
         logger.error(`Failed to evaluate transaction: ${error}`);
         return {status: 404, error};
