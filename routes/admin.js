@@ -34,11 +34,11 @@ router.post('/ddo', async function(req, res) {
 router.put('/ddo', async function(req, res) {
   const invoke = require("./lib/invoke");
   logger.info('PUT /admin/ddo');
-  invoke(req.params.fcn, req.body);
-  /*
-  TODO
-  Make Update Chaincode
-  */
+
+  const ret = await invoke("updateKey", req.body);
+  if(ret === undefined) res.status(201).send("Successfully invoke registerDDo transaction");
+  else if(ret.status === 400) res.status(400).send("Bad Request");
+  else res.status(401).send('Register admin first');
   res.status(201).send("Successfully invoke transaction");
 })
 
