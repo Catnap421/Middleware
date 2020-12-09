@@ -14,8 +14,8 @@ router.get('/ddo/:did', apiLimiter, async function(req, res) {
   logger.info('GET /user/ddo/:did');
   const path = req.path.split('/')[2].split('%2C');
   logger.info("/ddo/:did -", path)
-  const ret = await query("queryDDo", req.query.user, req.query.domain, path, req.headers.apikey);
-  if(!ret.hasOwnProperty('status')) res.status(200).json(ret.toString());
+  const ret = JSON.parse(await query("queryDDo", req.query.user, req.query.domain, path, req.headers.apikey));
+  if(!ret.hasOwnProperty('status')) res.status(200).json(ret);
   else if(ret.status === 401) res.status(401).send('Unauthorized');
   else res.status(404).send('Error');
 });
@@ -25,8 +25,8 @@ router.get('/vc/:did', apiLimiter, async function(req, res) {
   logger.info('GET /user/vc/:did');
   const path = req.path.split('/')[2].split('%2C');
   logger.info("/vc/:did -", path)
-  const ret = await query("queryVC", req.query.user, req.query.domain, path, req.headers.apikey);
-  if(!ret.hasOwnProperty('status')) res.status(200).json(ret.toString());
+  const ret = JSON.parse(await query("queryVC", req.query.user, req.query.domain, path, req.headers.apikey));
+  if(!ret.hasOwnProperty('status')) res.status(200).json(ret);
   else if(ret.status === 401) res.status(401).send('Unauthorized');
   else res.status(404).send('Error');
 });
