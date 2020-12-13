@@ -284,7 +284,6 @@ definitions:
     required:
     - "key"
     - "pubkey"  
-    - "sID"   
     properties:
       key:
         type: "string"
@@ -298,20 +297,5 @@ definitions:
         type: "string"
         description: "공개키 타입"
         example: ""
-      context:
-        type: "string"
-        description: "Context Spec"
-        example: ""
-      sID:
-        type: "string"
-        description: ""
-        example: "did:bob:issuerDID"
-      sType:
-        type: "string"
-        description: "Service Type for Issuer"
-        example: ""
-      sEndpoint:
-        type: "string"
-        description: "Service Endpoint for Issuer"
-        example: ""
+
        
