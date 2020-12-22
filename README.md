@@ -45,6 +45,37 @@
  ├── package.json
 
  └── apikey.json
+ 
+
+## Dependencies
+
+### Setting
+
+| Name    | Version |
+| ------- | ------- |
+| Node.js | 10.22.1 |
+| NPM     | 6.14.6  |
+
+
+### Packages
+
+| Package Name              | Version|
+| ------------------------- | :----- |
+| body-parser               | 1.19.0 |
+| cors                      | 2.8.5  |
+| crypto                    | 1.0.1  |
+| ejs                       | 3.1.5  |
+| express                   | 4.17.1 |
+| express-rate-limit        | 5.1.3  |
+| fabric-ca-client          | 2.2.3  |
+| fabric-client             | 1.4.14 |
+| fabric-network            | 1.4.14 |
+| multer                    | 1.4.2  |
+| pdf-parse                 | 1.1.1  |
+| uuid-apikey               | 1.5.1  |
+| winston                   | 3.3.3  |
+| winston-daily-rotate-file | 4.5.0  |
+| yamljs                    | 0.3.0  |
 
 
 
