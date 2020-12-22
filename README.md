@@ -215,3 +215,106 @@ module.exports = query
 ```
 
 
+## API
+
+### Admin
+
+**POST /admin**
+
+| 인자          | 타입 | 인자 유형 |
+| ------------- | ---- | --------- |
+| No parameters | -    | -         |
+
+**POST /admin/domain**
+
+| 인자   | 타입   | 인자 유형 |
+| ------ | ------ | --------- |
+| user   | string | body      |
+| domain | string | body      |
+
+**POST /admin/ddo**
+
+| 인자 | 타입      | 인자 유형 |
+| ---- | --------- | --------- |
+| args | array[vc] | body      |
+
+**PUT /admin/ddo**
+
+| 인자 | 타입       | 인자 유형 |
+| ---- | ---------- | --------- |
+| args | array[DDo] | body      |
+
+**DELETE /admin/ddo**
+
+| 인자 | 타입   | 인자 유형 |
+| ---- | ------ | --------- |
+| args | string | body      |
+
+**POST /admin/vc**
+
+| 인자 | 타입      | 인자 유형 |
+| ---- | --------- | --------- |
+| args | array[VC] | body      |
+
+
+
+### User
+
+**GET /user/ddo/{did}**
+
+| 인자   | 타입          | 인자 유형 |
+| ------ | ------------- | --------- |
+| user   | string        | query     |
+| domain | string        | query     |
+| did    | array[string] | path      |
+
+
+
+**GET /user/vc/{did}**
+
+| 인자   | 타입          | 인자 유형 |
+| ------ | ------------- | --------- |
+| user   | string        | query     |
+| domain | string        | query     |
+| did    | array[string] | path      |
+
+
+
+**POST /user/apikey**
+
+| 인자   | 타입   | 인자 유형 |
+| ------ | ------ | --------- |
+| user   | string | body      |
+| domain | string | body      |
+| uuid   | string | body      |
+
+
+
+### Models
+
+**VC**
+
+| 인자           | 타입   | 설명                  |
+| -------------- | ------ | --------------------- |
+| key            | string | DID of Document       |
+| issuerDID      | string | DID of Issuer         |
+| controller     | string | DID of Controller     |
+| issuanceDate   | string | Issuance Date         |
+| expirationDate | string | Expiration Date       |
+| sig            | string | Signature Value       |
+| sigType        | string | The Type of Signature |
+| hashType       | string | The Type of Hash      |
+| claim          | string | The Hash of Claims    |
+
+ 
+
+**DDo**
+
+| 인자       | 타입   | 설명                   |
+| ---------- | ------ | ---------------------- |
+| key        | string | Key for Identifier     |
+| pubkey     | string | Public Key             |
+| pubkeyType | string | The Type of Public Key |
+
+
+
