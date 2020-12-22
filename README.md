@@ -4,41 +4,41 @@
 
 ├── config
 
- │      ├── connection-org1.json // 블록체인 네트워크와 통신하기 위함
+ │      ├── connection-org1.json // For Network Connetcion 
 
- │      └── winston.js
+ │      └── winston.js // Winston Setting File
 
 ├──  routes
 
  │       ├── lib
 
- │       │       ├── enrollAdmin.js
+ │       │       ├── enrollAdmin.js // Enroll Fabric Network Admin 
 
- │       │       ├── invoke.js
+ │       │       ├── invoke.js // Invoke to Fabric Network
 
- │       │       ├── query.js
+ │       │       ├── query.js // Query to Fabri Network
 
- │       │       ├── recoverApiKey.js
+ │       │       ├── recoverApiKey.js // Recover API-key
 
- │       │       └── registerDomainAndUser.js
+ │       │       └── registerDomainAndUser.js // Register Fabric Network User
 
  │       ├── swagger
 
- │       │       └── swagger.yaml
+ │       │       └── swagger.yaml // Swagger Setting File
 
- │       ├── admin.js
+ │       ├── admin.js // Routes for Admin
 
- │       ├── index.js
+ │       ├── index.js // Routes for Demo - Verifier
 
- │       ├── user.js
+ │       ├── user.js // Routes for User
 
- │       └── rateLimit.js
+ │       └── rateLimit.js // RateLimit Setting File
 
  ├── views
 
- │       ├── index.ejs
+ │       ├── index.ejs // Index ejs File
 
- ├── wallets
+ ├── wallets 
 
  ├── app.js
 
