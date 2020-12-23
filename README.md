@@ -1,50 +1,32 @@
 ## File Directory
 
+
+```
 . 
-
 ├── config
+│       ├── connection-org1.json
+│       └── winston.js
+├── routes
+│   └── lib
+│   │   ├── enrollAdmin.js
+│   │   ├── invoke.js
+│   │   ├── query.js
+│   │   ├── recoverApiKey.js
+│   │   └── registerDomainAndUser.js
+│   ├── swagger
+│   │   └── swagger.yaml
+│   ├── admin.js
+│   ├── index.js
+│   ├── user.js
+│   └── rateLimit.js
+├── views
+│   └── index.ejs
+├── wallets
+├── app.js
+├── package.json
+└── apikey.json
 
- │      ├── connection-org1.json # For Network Connetcion 
-
- │      └── winston.js # Winston Setting File
-
-├──  routes
-
- │       ├── lib
-
- │       │       ├── enrollAdmin.js # Enroll Fabric Network Admin 
-
- │       │       ├── invoke.js # Invoke to Fabric Network
-
- │       │       ├── query.js # Query to Fabri Network
-
- │       │       ├── recoverApiKey.js # Recover API-key
-
- │       │       └── registerDomainAndUser.js # Register Fabric Network User
-
- │       ├── swagger
-
- │       │       └── swagger.yaml # Swagger Setting File
-
- │       ├── admin.js # Routes for Admin
-
- │       ├── index.js # Routes for Demo - Verifier
-
- │       ├── user.js # Routes for User
-
- │       └── rateLimit.js # RateLimit Setting File
-
- ├── views
-
- │       ├── index.ejs # Index ejs File
-
- ├── wallets 
-
- ├── app.js
-
- ├── package.json
-
- └── apikey.json
+```
  
 
 ## Dependencies
