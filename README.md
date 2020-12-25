@@ -199,6 +199,8 @@ module.exports = query
 
 ## API
 
+https://app.swaggerhub.com/apis/catnap/Middleware/1.0.4
+
 ### Admin
 
 **POST /admin**
